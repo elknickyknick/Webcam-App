@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Webcam App</title>
+	<meta charset="utf-8" />
+	<link href='http://ajax.googlepics.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
+	<link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Quattrocento' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Monoton' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Shojumaru' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Frijole' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Codystar' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Cabin+Sketch' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'></link>
+	<link href='https://fonts.googleapis.com/css?family=Dancing+Script' rel='stylesheet' type='text/css'></link>
+	
+	<style type="text/css">
+		body
+		{
+			width: 1585px;
+			height: 100%;
+			margin: 0;
+			background: #6E6E6E;
+			font-family: "Arial", sans-serif;
+		}
+/*********for the CANVAS AREA*********/
+		#canvasContainer
+		{
+			width: 840px;
+			height: 720px;
+			margin-top: 51px;
+			margin-left: 10%;
+			float: left;
+		}
+		video
+		{
+			z-index: -1;
+			position: absolute;
+			pointer-events: none;
+		}
+		canvas
+		{
+			position: absolute;
+		}
+		#topcanvas
+		{
+			z-index: 2;
+			pointer-events: none;
+			
+		}
+		#botcanvas
+		{
+			z-index: 1;
+			background: none;
+		}
+		#camcanvas
+		{
+			z-index: 0;
+			box-shadow:  0px 18px 45px #888888;
+			background: none;
+		}
+/*********for the UI BUTTON AREA*********/
+		#UIbuttons
+		{
+			width: 840px;
+			height: 50px;
+			top: 640px;
+			float: left;
+			position: relative;
+		}
+		.uibutton
+		{
+			width: 150px;
+			height: 34px;
+			margin-top: 15px;
+			font-size: 14pt;
+			font-weight: 600;
+		}
+		#capbutton
+		{
+			margin-left: 20px;
+		}
+		#clearbutton
+		{
+			width: 150px;
+			height: 34px;
+			float: right;
+			margin-right: 15px;
+			font-size: 14pt;
+			font-weight: 600;
+		}
+/*********for the EDIT AREAS*********/
+		.editSections
+		{
+			width: 316.5px;
+			border-style: solid;
+			border-width: 3px;
+			background-color: #C3C3C3;
+		}
+		h1
+		{
+			margin: 0 0 7px 0;
+			padding-left: 7px;
+			border-style: solid;
+			border-width: 1px;
+			font-size: 22pt;
+			background-color: #919191;	
+		}
+		.editSections label
+		{
+			width: 45%;
+			float: left;
+			padding: 3.5px;
+			margin-bottom: 10px;
+			text-align: right;
+			font-weight: 600;
+		}
+		.editSections select
+		{
+			width: 47.5%;
+			height: 25px;
+			float: left;
+			margin-bottom: 10px;
+			margin-left: 3%;
+		}
+		
+	/******right side****/
+		#textSection
+		{
+			width: 316.5px;
+			height: 300px;
+			float: right;
+			margin: 70px 6.75% 20px 2.75px;
+		}
+		#twInput
+		{
+			width: 88%;
+			height: 25px;
+			margin-bottom: 12px;
+			margin-left: 6%;
+			font-size: 18px;
+		}
+		#twSizeSlider
+		{
+			width: 47.5%;
+			float: left;
+			margin-left: 3%;
+		}
+		
+		#stickerSection
+		{
+			width: 316.5px;
+			height: 120px;
+			float: right;
+			margin: 34px 6.75% 0px 2.75px;
+		}
+		#stickerSection h1
+		{
+			margin-bottom: 10px;
+		}
+		#stickerChooser label
+		{
+			width: 47.5%;
+			height: 25px;
+			float: left;
+			margin-bottom: 10px;
+			margin-left: 3%;
+			margin-bottom: 12px;
+		}
+		
+		button
+		{
+			width: 44px;
+			height: 26px;
+			margin-left: 136.25px;
+		}
+	</style>
+	
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="js/webapp.js"></script>
+	<script src="js/textwidget.js"></script>
+	<script src="js/stickerwidget.js"></script>
+</head>
+<body>
+	<div id="canvasContainer">
+		<canvas id="topcanvas" width="840" height="640">
+			Your browser does not support the canvas tag. Please use a browser that
+			supports this canvas to gain the full experience.
+		</canvas>
+		<canvas id="botcanvas" width="840" height="640">
+			Your browser does not support the canvas tag. Please use a browser that
+			supports this canvas to gain the full experience.
+		</canvas>
+		<canvas id="camcanvas" width="840" height="640">
+			Your browser does not support the canvas tag. Please use a browser that
+			supports this canvas to gain the full experience.
+		</canvas>
+		<video autoplay width="840" height="640"></video>
+		<div id="UIbuttons">
+			<button id="capbutton" class="uibutton">Capture Image</button>
+			<button id="clearbutton" class="uibutton">Clear Canvas</button>
+		</div>
+	</div>
+	
+	<div id="textSection" class="editSections">
+		<!---text widget (tw for short)--->
+		<h1>Add some text!</h1>
+		<input type="text" id="twInput" value="your text here..."></input>
+		<label for="twFontChooser">Font Chooser:</label>
+			<select name="twFontChooser" id="twFontChooser">
+				<option value="Times New Roman" selected>Times New Roman</option>
+				<option value="Poiret One">Poiret One</option>
+				<option value="Quattrocento">Quattrocento</option>
+				<option value="Monoton">Monoton</option>
+				<option value="Shojumaru">Shojumaru</option>
+				<option value="Frijole">Frijole</option>
+				<option value="Codystar">Codystar</option>
+				<option value="Rock Salt">Rock Salt</option>
+				<option value="Cabin Sketch">Cabin Sketch</option>
+				<option value="Slackey">Slackey</option>
+				<option value="Dancing Script">Dancing Script</option>
+			</select>
+		<label for="twStyleChooser">Style Chooser:</label>
+			<select name="twStyleChooser" id="twStyleChooser">
+				<option value="normal" selected>normal</option>
+				<option value="italic">italics</option>
+				<option value="oblique">oblique</option>
+			</select>
+		<label for="twWeightChooser">Weight Chooser:</label>
+			<select name="twWeightChooser" id="twWeightChooser">
+				<option value="lighter">lighter</option>
+				<option value="normal" selected>normal</option>
+				<option value="bold">bold</option>
+				<option value="bolder">bolder</option>
+			</select>
+		<label for="twColorChooser">Color Chooser:</label>
+			<select name="twColorChooser" id="twColorChooser">
+				<option value="black" selected>black</option>
+				<option value="white">white</option>
+				<option value="pink">pink</option>
+				<option value="red">red</option>
+				<option value="orange">orange</option>
+				<option value="yellow">yellow</option>
+				<option value="lime">lime</option>
+				<option value="green">green</option>
+				<option value="darkgreen">dark green</option>
+				<option value="cyan">cyan</option>
+				<option value="blue">blue</option>
+				<option value="lavender">lavender</option>
+				<option value="purple">purple</option>
+				<option value="darkviolet">dark violet</option>
+			</select>
+		<label for="twSizeSlider">Size Chooser:</label>
+			<input id="twSizeSlider" type="range" min="15" max="95" step="1" value="35" />
+		<button id="twButton">OK</button>
+	</div>
+	<div id="stickerSection" class="editSections">
+		<h1>Sticker!!</h1>
+		<label for="stickerChooser">Sticker Chooser:</label>
+		<select name="stickerChooser" id="stickerChooser">
+			<option value="sunglasses">Sunglasses</option>
+			<option value="ghost">Ghost</option>
+			<option value="bats">Bats</option>
+			<option value="jack-o-lantern">Jack-o'-lantern</option>
+			<option value="witch">Witch</option>
+			<option value="flower">Flower</option>
+			<option value="crown">Crown</option>
+			<option value="speechbubbleA">Speech Bubble</option>
+			<option value="thoughtbubble">Thought Bubble</option>
+		</select>
+		<button id="swButton">OK</button>
+	</div>
+</body>
+</html>
